@@ -13,96 +13,42 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-public class GUIFindSuspect extends JFrame{
 
-	private JPanel panel;
-	private JButton button;
-	private JTextField textField;
-	private JLabel label;
-	Registry registryGUI = new Registry();
-	
-	// Search of a suspect panel
-	
-	public GUIFindSuspect(Registry registry) {
+class GUISuspectPage extends JFrame{
 		
-		registryGUI = registry;
-		
-		panel = new JPanel();
-		button = new JButton("Find");
-        label = new JLabel("Please enter a suspect's name");
-
-		textField = new JTextField(20);
-
-		ButtonListenerFindSuspect listener = new ButtonListenerFindSuspect();
-		button.addActionListener(listener);
-		
-		
-		
-		panel.add(label);
-		panel.add(textField);
-		panel.add(button);
-		
-		this.setContentPane(panel);
-		
-		setVisible(true);
-		setSize(400,150);
-		setTitle("Find Suspect");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-}
-
-	
-class ButtonListenerFindSuspect implements ActionListener {
-		
-		 public void actionPerformed(ActionEvent e) {
-			 
-			boolean SuspectFound = false;
-			
-			 for(int i=0; i<registryGUI.suspects.size(); i++) {
-				 if(registryGUI.suspects.get(i).getName().equals(textField.getText())) {
-					 new SuspectPage(registryGUI, registryGUI.suspects.get(i));
-					 SuspectFound = true;
-					 dispose();
-				 }
-			 }
-			 if(!SuspectFound)
-				 JOptionPane.showMessageDialog(null, "Suspect "+ textField.getText() + " not found");
-		 }
-		 
-	} 
-
-class SuspectPage extends JFrame{
-		
-		private JPanel panel1,panel2,panel3,panel4,panel5;
+		private JPanel panel,panel1,panel2,panel3,panel4,panel5;
 		private ArrayList<Suspect> listSuggestedPartners = new ArrayList<>();
 		private JLabel labelPartners,labelSuggestedPartners,labelSuspectsFromSameCountry;
 		private Suspect suspectGUIPage;
 		private JTextField textFieldCodeName,textFieldPhoneNumber;
 		private JTextArea textAreaSuspectTelephoneNumbers,textAreaSMS,textAreaPartners,textAreaSuggestedPartners,textAreaSuspectsFromSameCountry;
 		private JButton buttonReturntoSearch;
-		
+		private Registry registryGUI;
+
 		
 		// Create a page of the suspect with all the information
-		public SuspectPage(Registry registry, Suspect suspect) {
-			
+		public GUISuspectPage(Registry registry, Suspect suspect) {
 			registryGUI = registry;
 			suspectGUIPage = suspect;
+			initializeGUISuspectPage();
+					
+		}
+		
+		public void initializeGUISuspectPage() {
+			
 			Border blackline = BorderFactory.createLineBorder(Color.BLACK);	
-			
-
-			
 			panel = new JPanel();
 			panel1 = new JPanel();
-			textField = new JTextField(20);
-			label = new JLabel();
+			JTextField textFieldSuspectName = new JTextField(20);
+			JLabel label = new JLabel();
 			
 			panel.add(panel1);
 			panel1.add(label);
-			panel1.add(textField);
+			panel1.add(textFieldSuspectName);
 			
 			// Show suspect's name
-			textField.setText(suspectGUIPage.getName());
-			textField.setEditable(false);
+			textFieldSuspectName.setText(suspectGUIPage.getName());
+			textFieldSuspectName.setEditable(false);
 			
 			
 			// Show suspect's nickname
@@ -130,7 +76,7 @@ class SuspectPage extends JFrame{
 			// User inserts phone number and shows suspicious SMS between the suspect and the inserted phone number
 			
 			panel2 = new JPanel();
-			button = new JButton("Find Suspicious SMS");
+			JButton button = new JButton("Find Suspicious SMS");
 			ButtonListenerFindSMS findSMSlistener = new ButtonListenerFindSMS();
 			button.addActionListener(findSMSlistener);
 			
@@ -223,9 +169,9 @@ class SuspectPage extends JFrame{
 			setVisible(true);
 			setSize(650,650);
 			setTitle("Suspect Page");
+			setResizable(false);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
-		
 		
 		
 		
@@ -261,11 +207,8 @@ class ButtonReturntoSearchScreen implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		dispose();
-		new GUIFindSuspect(registryGUI);
+		new GUIFindSuspectWindow(registryGUI);
 	}
 	
    }
-
- }
-
 }
