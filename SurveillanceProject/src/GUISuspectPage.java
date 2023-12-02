@@ -133,8 +133,8 @@ class GUISuspectPage extends JFrame{
 			textAreaPartners.setEnabled(false);
 			textAreaPartners.setDisabledTextColor(Color.black);
 			
-			for(int i=0; i<suspectGUIPage.possibleSuspects.size(); i++) {
-				textAreaPartners.append(suspectGUIPage.possibleSuspects.get(i).getName() + " , " + suspectGUIPage.possibleSuspects.get(i).getCodeName());
+			for(int i=0; i<suspectGUIPage.getPartners().size(); i++) {
+				textAreaPartners.append(suspectGUIPage.getPartners().get(i).getName() + " , " + suspectGUIPage.getPartners().get(i).getCodeName());
 				textAreaPartners.append("\n");
 				}
 			
@@ -155,7 +155,7 @@ class GUISuspectPage extends JFrame{
 			textAreaSuggestedPartners.setEnabled(false);
 			textAreaSuggestedPartners.setDisabledTextColor(Color.black);
 			
-			listSuggestedPartners = suspectGUIPage.getSuggestedPartners();
+			listSuggestedPartners = registryGUI.getSuggestedPartners(suspectGUIPage);
 			
 			for(int i=0; i<listSuggestedPartners.size(); i++) {
 				textAreaSuggestedPartners.append(listSuggestedPartners.get(i).getName());
@@ -178,9 +178,9 @@ class GUISuspectPage extends JFrame{
 			textAreaSuspectsFromSameCountry.append("Suspects coming from " + suspectGUIPage.getCountryName() + "\n" +
 			"----------------------------------------------" + "\n");
 			
-			for(int i=0; i<registryGUI.suspects.size(); i++) {
-				if(suspectGUIPage.getCountryName().equals(registryGUI.suspects.get(i).getCountryName())) {
-					textAreaSuspectsFromSameCountry.append(registryGUI.suspects.get(i).getName() + "\n");
+			for(int i=0; i<registryGUI.getSuspects().size(); i++) {
+				if(suspectGUIPage.getCountryName().equals(registryGUI.getSuspects().get(i).getCountryName())) {
+					textAreaSuspectsFromSameCountry.append(registryGUI.getSuspects().get(i).getName() + "\n");
 				}
 			}
 			

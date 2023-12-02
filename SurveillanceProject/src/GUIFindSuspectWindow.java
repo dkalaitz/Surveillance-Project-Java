@@ -59,9 +59,9 @@ class ButtonListenerFindSuspect implements ActionListener {
 				 
 				boolean SuspectFound = false;
 				
-				 for(int i=0; i<registryGUI.suspects.size(); i++) {
-					 if(registryGUI.suspects.get(i).getName().equals(textField.getText())) {
-						 new GUISuspectPage(registryGUI, registryGUI.suspects.get(i));
+				 for(int i=0; i<registryGUI.getSuspects().size(); i++) {
+					 if(registryGUI.getSuspects().get(i).getName().equals(textField.getText())) {
+						 new GUISuspectPage(registryGUI, registryGUI.getSuspects().get(i));
 						 SuspectFound = true;
 						 dispose();
 					 }

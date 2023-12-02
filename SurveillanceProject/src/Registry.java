@@ -2,63 +2,60 @@ import java.util.ArrayList;
 
 public class Registry {
 	
-	ArrayList<Suspect> suspects = new ArrayList<Suspect>();
-	ArrayList<Suspect> possiblesuspects = new ArrayList<Suspect>();
-	ArrayList<Communication> communications = new ArrayList<Communication>();
-	ArrayList<Communication> tempcommunications = new ArrayList<Communication>();
-	ArrayList<SMS> ListofMessages = new ArrayList<SMS>();
-	ArrayList<SMS> TempMessages = new ArrayList<SMS>();
+	private ArrayList<Suspect> suspectsList = new ArrayList<Suspect>();
+	private ArrayList<Communication> communicationsList = new ArrayList<Communication>();
+	private ArrayList<SMS> ListofMessages = new ArrayList<SMS>();
+	private ArrayList<SMS> TempMessages = new ArrayList<SMS>();
 	private Suspect TopSuspect;
-	private int MaximumNumberofTelephoneNumbers;
-	private PhoneCall LongestPhoneCall;
-	private int MaxDuration;
-	private PhoneCall CurrentPhoneCall;	
-	
+	private int MaximumNumberofTelephoneNumbers, MaxDuration;
+	private PhoneCall LongestPhoneCall, CurrentPhoneCall;
+	private SuspectManager suspectManager = new SuspectManager(suspectsList);
+
 	// Add suspect to the registry
 	public void addSuspect(Suspect suspect) {
-		suspects.add(suspect);
-		}
-	
+		suspectsList.add(suspect);
+	}
+
+	// Get suggested partners through a function of SuspectManager
+    public ArrayList<Suspect> getSuggestedPartners(Suspect suspect) {
+        return suspectManager.getSuggestedPartners(suspect);
+    }
+    
+    public ArrayList<Suspect> findCommonPartners(Suspect suspect1, Suspect suspect2){
+    	return suspectManager.findCommonPartners(suspect1, suspect2);
+    }
+    
+    public void printPartners(Suspect suspect) {
+    	suspectManager.printPossiblePartners(suspect);
+    }
+    
 	// Add communication to the registry
 	public void addCommunication(Communication communication) {
-		communications.add(communication);
-		for(int i=0; i<suspects.size(); i++) {
-			for(int j=0; j<suspects.get(i).getTelephoneNumbers().size(); j++) {
-				if(suspects.get(i).getTelephoneNumbers().get(j) == communication.getFirstPhoneNumber()) {
-					for(int k=0; k<suspects.size(); k++) {
-						for(int y=0; y<suspects.get(k).getTelephoneNumbers().size(); y++) {
-							if(suspects.get(k).getTelephoneNumbers().get(y) == communication.getSecondPhoneNumber()) {
-								suspects.get(i).addPossibleSuspects(suspects.get(k), communication);
-							}
-						}
-					}
-				}	
-			}
-		}
+		communicationsList.add(communication);
+        suspectManager.connectSuspectsByCommunication(communication);
 	}
 	
-	
 	public Suspect getSuspectWithMostPartners() {
-		MaximumNumberofTelephoneNumbers = suspects.get(0).getTelephoneNumbers().size();
-		for(int i=1; i<suspects.size(); i++) {
-			if(suspects.get(i).getTelephoneNumbers().size() > MaximumNumberofTelephoneNumbers ) {
-				MaximumNumberofTelephoneNumbers = suspects.get(i).getTelephoneNumbers().size();
-				TopSuspect = suspects.get(i);
+		MaximumNumberofTelephoneNumbers = suspectsList.get(0).getTelephoneNumbers().size();
+		for(int i=1; i<suspectsList.size(); i++) {
+			if(suspectsList.get(i).getTelephoneNumbers().size() > MaximumNumberofTelephoneNumbers ) {
+				MaximumNumberofTelephoneNumbers = suspectsList.get(i).getTelephoneNumbers().size();
+				TopSuspect = suspectsList.get(i);
 			}
 		}
 		return TopSuspect;
 	}
 	
 	public PhoneCall getLongestPhoneCallBetween(String Num1, String Num2) {
-		LongestPhoneCall = (PhoneCall)communications.get(0);
+		LongestPhoneCall = (PhoneCall)communicationsList.get(0);
 		MaxDuration = LongestPhoneCall.getDuration();
 		for(int i=0; i<7; i++) {
-			CurrentPhoneCall = (PhoneCall)communications.get(i);
-			if((communications.get(i).getFirstPhoneNumber() == Num1 && communications.get(i).getSecondPhoneNumber() == Num2)
-					|| communications.get(i).getFirstPhoneNumber() == Num2 && communications.get(i).getSecondPhoneNumber() == Num1) {
+			CurrentPhoneCall = (PhoneCall)communicationsList.get(i);
+			if((communicationsList.get(i).getFirstPhoneNumber() == Num1 && communicationsList.get(i).getSecondPhoneNumber() == Num2)
+					|| communicationsList.get(i).getFirstPhoneNumber() == Num2 && communicationsList.get(i).getSecondPhoneNumber() == Num1) {
 				if(MaxDuration < CurrentPhoneCall.getDuration()) {
 					MaxDuration = CurrentPhoneCall.getDuration();
-					LongestPhoneCall = (PhoneCall)communications.get(i);
+					LongestPhoneCall = (PhoneCall)communicationsList.get(i);
 				}
 			}
 		}
@@ -67,13 +64,13 @@ public class Registry {
 	}
 	
 	public ArrayList<SMS> getSuspiciousMessagesBetween(String Num1, String Num2) {
-		for(int i=7; i<communications.size(); i++) {
-			TempMessages.add((SMS)communications.get(i));
+		for(int i=7; i<communicationsList.size(); i++) {
+			TempMessages.add((SMS)communicationsList.get(i));
 		}
 		int j = 0;
-		for(int i=7; i<communications.size(); i++) {
-			if((communications.get(i).getFirstPhoneNumber().equals(Num1)) && communications.get(i).getSecondPhoneNumber().equals(Num2)
-					|| communications.get(i).getFirstPhoneNumber().equals(Num2) && communications.get(i).getSecondPhoneNumber().equals(Num1)) {
+		for(int i=7; i<communicationsList.size(); i++) {
+			if((communicationsList.get(i).getFirstPhoneNumber().equals(Num1)) && communicationsList.get(i).getSecondPhoneNumber().equals(Num2)
+					|| communicationsList.get(i).getFirstPhoneNumber().equals(Num2) && communicationsList.get(i).getSecondPhoneNumber().equals(Num1)) {
 				if(TempMessages.get(j).getMessage().contains("Bomb") || TempMessages.get(j).getMessage().contains("Explosives") ||
 						TempMessages.get(j).getMessage().contains("Gun") || TempMessages.get(j).getMessage().contains("Attack"))
 					ListofMessages.add(TempMessages.get(j));
@@ -84,10 +81,16 @@ public class Registry {
 	}
 	
 	public void printSuspectsFromCountry(String country) {
-		for(int i=0; i<suspects.size(); i++) {
-			if(country == suspects.get(i).getCountryName()) {
-				System.out.println(suspects.get(i).getName()+" ("+suspects.get(i).getCodeName()+")");
+		for(int i=0; i<suspectsList.size(); i++) {
+			if(country == suspectsList.get(i).getCountryName()) {
+				System.out.println(suspectsList.get(i).getName()+" ("+suspectsList.get(i).getCodeName()+")");
 			}
 		}
 	}
+	
+	
+	public ArrayList<Suspect> getSuspects(){
+		return suspectsList;
+	}
+	
 }
