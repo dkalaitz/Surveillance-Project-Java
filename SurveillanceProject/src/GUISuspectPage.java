@@ -16,7 +16,7 @@ import javax.swing.border.Border;
 
 class GUISuspectPage extends JFrame{
 		
-		private JPanel panel,panel1,panel2,panel3,panel4,panel5;
+		private JPanel panel,panelSuspectInfo,panelSMS,panelPartners,panelSuggestedPartners,panelSameCountry;
 		private ArrayList<Suspect> listSuggestedPartners = new ArrayList<>();
 		private JLabel labelPartners,labelSuggestedPartners,labelSuspectsFromSameCountry;
 		private Suspect suspectGUIPage;
@@ -24,6 +24,7 @@ class GUISuspectPage extends JFrame{
 		private JTextArea textAreaSuspectTelephoneNumbers,textAreaSMS,textAreaPartners,textAreaSuggestedPartners,textAreaSuspectsFromSameCountry;
 		private JButton buttonReturntoSearch;
 		private Registry registryGUI;
+		private Border blackline = BorderFactory.createLineBorder(Color.BLACK);	
 
 		
 		// Create a page of the suspect with all the information
@@ -31,31 +32,55 @@ class GUISuspectPage extends JFrame{
 			registryGUI = registry;
 			suspectGUIPage = suspect;
 			initializeGUISuspectPage();
-					
 		}
 		
 		public void initializeGUISuspectPage() {
+		       initializePanels();
+		       setupSuspectInfoPanel();
+		       setupSMSPanel();
+		       setupPartnersPanel();
+		       setupSuggestedPartnersPanel();
+		       setupSameCountryPanel();
+		       setupReturnToSearchButton();
+		}
+		
+		
+		private void initializePanels() {
 			
-			Border blackline = BorderFactory.createLineBorder(Color.BLACK);	
 			panel = new JPanel();
-			panel1 = new JPanel();
+			panelSuspectInfo = new JPanel();
+			panelSMS = new JPanel();
+			panelPartners = new JPanel();
+			panelSuggestedPartners = new JPanel();
+			panelSameCountry = new JPanel();
+
+			this.setContentPane(panel);
+			setVisible(true);
+			setSize(650,650);
+			setTitle("Suspect Page");
+			setResizable(false);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
+		
+		// Show suspect's Info
+		private void setupSuspectInfoPanel() {
+			
 			JTextField textFieldSuspectName = new JTextField(20);
 			JLabel label = new JLabel();
 			
-			panel.add(panel1);
-			panel1.add(label);
-			panel1.add(textFieldSuspectName);
+			panel.add(panelSuspectInfo);
+			panelSuspectInfo.add(label);
+			panelSuspectInfo.add(textFieldSuspectName);
 			
 			// Show suspect's name
 			textFieldSuspectName.setText(suspectGUIPage.getName());
 			textFieldSuspectName.setEditable(false);
 			
-			
 			// Show suspect's nickname
-		
+			
 			textFieldCodeName = new JTextField(20);
 			
-			panel1.add(textFieldCodeName);
+			panelSuspectInfo.add(textFieldCodeName);
 			textFieldCodeName.setText(suspectGUIPage.getCodeName());
 			textFieldCodeName.setEditable(false);
 			
@@ -63,7 +88,7 @@ class GUISuspectPage extends JFrame{
 			
 			textAreaSuspectTelephoneNumbers = new JTextArea();
 			
-			panel1.add(textAreaSuspectTelephoneNumbers);
+			panelSuspectInfo.add(textAreaSuspectTelephoneNumbers);
 			textAreaSuspectTelephoneNumbers.setSize(50, 50);
 			for(int i=0; i<suspectGUIPage.getTelephoneNumbers().size(); i++) {
 				textAreaSuspectTelephoneNumbers.append(suspectGUIPage.getTelephoneNumbers().get(i));
@@ -71,11 +96,12 @@ class GUISuspectPage extends JFrame{
 			}
 			textAreaSuspectTelephoneNumbers.setEditable(false);
 			
-			panel1.setBorder(blackline);
+			panelSuspectInfo.setBorder(blackline);
+		}
 			
-			// User inserts phone number and shows suspicious SMS between the suspect and the inserted phone number
+		// User inserts phone number and shows suspicious SMS between the suspect and the inserted phone number
+		private void setupSMSPanel() {
 			
-			panel2 = new JPanel();
 			JButton button = new JButton("Find Suspicious SMS");
 			ButtonListenerFindSMS findSMSlistener = new ButtonListenerFindSMS();
 			button.addActionListener(findSMSlistener);
@@ -86,23 +112,24 @@ class GUISuspectPage extends JFrame{
 			textAreaSMS.setEnabled(false);
 			textAreaSMS.setDisabledTextColor(Color.black);
 
-			panel.add(panel2);
-			panel2.add(textFieldPhoneNumber);
-			panel2.add(textAreaSMS);
-			panel2.add(button);
+			panel.add(panelSMS);
+			panelSMS.add(textFieldPhoneNumber);
+			panelSMS.add(textAreaSMS);
+			panelSMS.add(button);
 			
-			panel2.setBorder(blackline);
+			panelSMS.setBorder(blackline);
+		}
 			
-			// Show potential partners
+		// Show partners
+		private void setupPartnersPanel() {
 			
-			panel3 = new JPanel();
 			labelPartners = new JLabel();
 			textAreaPartners = new JTextArea(5,40);
 			
-			panel.add(panel3);
-			panel3.add(labelPartners);
+			panel.add(panelPartners);
+			panelPartners.add(labelPartners);
 			labelPartners.setText("Partners");
-			panel3.add(textAreaPartners);
+			panelPartners.add(textAreaPartners);
 			textAreaPartners.setEnabled(false);
 			textAreaPartners.setDisabledTextColor(Color.black);
 			
@@ -111,18 +138,20 @@ class GUISuspectPage extends JFrame{
 				textAreaPartners.append("\n");
 				}
 			
-			panel3.setBorder(blackline);
+			panelPartners.setBorder(blackline);
+		}
+		
+		
+		//Show the list of the possible partners
+		private void setupSuggestedPartnersPanel() {
 			
-			//Show the list of the possible partners
-			
-			panel4 = new JPanel();
 			labelSuggestedPartners = new JLabel();
 			textAreaSuggestedPartners = new JTextArea(5,20);
 
-			panel.add(panel4);
-			panel4.add(labelSuggestedPartners);
+			panel.add(panelSuggestedPartners);
+			panelSuggestedPartners.add(labelSuggestedPartners);
 			labelSuggestedPartners.setText("Suggested Partners ------->");
-			panel4.add(textAreaSuggestedPartners);
+			panelSuggestedPartners.add(textAreaSuggestedPartners);
 			textAreaSuggestedPartners.setEnabled(false);
 			textAreaSuggestedPartners.setDisabledTextColor(Color.black);
 			
@@ -133,45 +162,38 @@ class GUISuspectPage extends JFrame{
 				textAreaSuggestedPartners.append("\n");
 			}
 			
-			panel4.setBorder(blackline);
+			panelSuggestedPartners.setBorder(blackline);
+		}
 			
-			// Show the suspects' names with whom they are from the same country
-			
-			panel5 = new JPanel();
+		// Show the suspects' names with whom they are from the same country
+		private void setupSameCountryPanel() {
 			labelSuspectsFromSameCountry = new JLabel();
 			textAreaSuspectsFromSameCountry = new JTextArea(10,40);
 			textAreaSuspectsFromSameCountry.setEnabled(false);
 			textAreaSuspectsFromSameCountry.setDisabledTextColor(Color.black);
 			
-			panel.add(panel5);
-			panel5.add(labelSuspectsFromSameCountry);
-			panel5.add(textAreaSuspectsFromSameCountry);
-			textAreaSuspectsFromSameCountry.append("Suspects coming from " + suspectGUIPage.getCountryName() + "\n");
+			panel.add(panelSameCountry);
+			panelSameCountry.add(labelSuspectsFromSameCountry);
+			panelSameCountry.add(textAreaSuspectsFromSameCountry);
+			textAreaSuspectsFromSameCountry.append("Suspects coming from " + suspectGUIPage.getCountryName() + "\n" +
+			"----------------------------------------------" + "\n");
+			
 			for(int i=0; i<registryGUI.suspects.size(); i++) {
 				if(suspectGUIPage.getCountryName().equals(registryGUI.suspects.get(i).getCountryName())) {
 					textAreaSuspectsFromSameCountry.append(registryGUI.suspects.get(i).getName() + "\n");
 				}
 			}
 			
-			panel5.setBorder(blackline);
-			
-			// Return to Search Screen Button
-			
+			panelSameCountry.setBorder(blackline);
+		}
+		
+		// Return to Search Screen Button
+		private void setupReturnToSearchButton() {
 			buttonReturntoSearch = new JButton("Return to Search Screen");
 			ButtonReturntoSearchScreen listenerReturn = new ButtonReturntoSearchScreen();
 			buttonReturntoSearch.addActionListener(listenerReturn);
 			panel.add(buttonReturntoSearch);
-			
-			
-			
-			this.setContentPane(panel);
-			
-			setVisible(true);
-			setSize(650,650);
-			setTitle("Suspect Page");
-			setResizable(false);
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		}
+			}
 		
 		
 		
@@ -205,10 +227,9 @@ class ButtonListenerFindSMS implements ActionListener {
 class ButtonReturntoSearchScreen implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		
 		dispose();
 		new GUIFindSuspectWindow(registryGUI);
 	}
-	
-   }
+  }
+
 }
