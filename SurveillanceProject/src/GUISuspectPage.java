@@ -16,12 +16,12 @@ import javax.swing.border.Border;
 
 class GUISuspectPage extends JFrame{
 		
-		private JPanel panel,panelSuspectInfo,panelSMS,panelPartners,panelSuggestedPartners,panelSameCountry;
+		private JPanel panel,panelSuspectInfo,panelSMS,panelPotentialPartners,panelSuggestedPartners,panelSameCountry;
 		private ArrayList<Suspect> listSuggestedPartners = new ArrayList<>();
-		private JLabel labelPartners,labelSuggestedPartners,labelSuspectsFromSameCountry;
+		private JLabel labelPotentialPartners,labelSuggestedPartners,labelSuspectsFromSameCountry;
 		private Suspect suspectGUIPage;
 		private JTextField textFieldCodeName,textFieldPhoneNumber;
-		private JTextArea textAreaSuspectTelephoneNumbers,textAreaSMS,textAreaPartners,textAreaSuggestedPartners,textAreaSuspectsFromSameCountry;
+		private JTextArea textAreaSuspectTelephoneNumbers,textAreaSMS,textAreaPotentialPartners,textAreaSuggestedPartners,textAreaSuspectsFromSameCountry;
 		private JButton buttonReturntoSearch;
 		private Registry registryGUI;
 		private Border blackline = BorderFactory.createLineBorder(Color.BLACK);	
@@ -38,7 +38,7 @@ class GUISuspectPage extends JFrame{
 		       initializePanels();
 		       setupSuspectInfoPanel();
 		       setupSMSPanel();
-		       setupPartnersPanel();
+		       setupPotentialPartnersPanel();
 		       setupSuggestedPartnersPanel();
 		       setupSameCountryPanel();
 		       setupReturnToSearchButton();
@@ -50,7 +50,7 @@ class GUISuspectPage extends JFrame{
 			panel = new JPanel();
 			panelSuspectInfo = new JPanel();
 			panelSMS = new JPanel();
-			panelPartners = new JPanel();
+			panelPotentialPartners = new JPanel();
 			panelSuggestedPartners = new JPanel();
 			panelSameCountry = new JPanel();
 
@@ -121,24 +121,24 @@ class GUISuspectPage extends JFrame{
 		}
 			
 		// Show partners
-		private void setupPartnersPanel() {
+		private void setupPotentialPartnersPanel() {
 			
-			labelPartners = new JLabel();
-			textAreaPartners = new JTextArea(5,40);
+			labelPotentialPartners = new JLabel();
+			textAreaPotentialPartners = new JTextArea(5,40);
 			
-			panel.add(panelPartners);
-			panelPartners.add(labelPartners);
-			labelPartners.setText("Partners");
-			panelPartners.add(textAreaPartners);
-			textAreaPartners.setEnabled(false);
-			textAreaPartners.setDisabledTextColor(Color.black);
+			panel.add(panelPotentialPartners);
+			panelPotentialPartners.add(labelPotentialPartners);
+			labelPotentialPartners.setText("Potential Partners");
+			panelPotentialPartners.add(textAreaPotentialPartners);
+			textAreaPotentialPartners.setEnabled(false);
+			textAreaPotentialPartners.setDisabledTextColor(Color.black);
 			
 			for(int i=0; i<suspectGUIPage.getPartners().size(); i++) {
-				textAreaPartners.append(suspectGUIPage.getPartners().get(i).getName() + " , " + suspectGUIPage.getPartners().get(i).getCodeName());
-				textAreaPartners.append("\n");
+				textAreaPotentialPartners.append(suspectGUIPage.getPartners().get(i).getName() + " , " + suspectGUIPage.getPartners().get(i).getCodeName());
+				textAreaPotentialPartners.append("\n");
 				}
 			
-			panelPartners.setBorder(blackline);
+			panelPotentialPartners.setBorder(blackline);
 		}
 		
 		

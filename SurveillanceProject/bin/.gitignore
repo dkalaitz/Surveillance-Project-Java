@@ -16,3 +16,9 @@
 /GUISuspectPage$ButtonListenerFindSMS.class
 /GUISuspectPage$ButtonReturntoSearchScreen.class
 /SuspectManager.class
+/AnalysisHandler.class
+/Handler.class
+/Statistics.class
+/CommunicationStatisticsAnalyzer.class
+/CommunicationAnalyzer.class
+/SuspectsListHandler.class
