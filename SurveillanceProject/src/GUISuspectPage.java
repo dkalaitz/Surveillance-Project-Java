@@ -197,39 +197,47 @@ class GUISuspectPage extends JFrame{
 		
 		
 		
-class ButtonListenerFindSMS implements ActionListener {
+private class ButtonListenerFindSMS implements ActionListener {
+
+	    public void actionPerformed(ActionEvent e) {
+	    	clearTextArea();
+	        String textedPhoneNumber = textFieldPhoneNumber.getText();
+	        boolean suspiciousMessagesFound = processPhoneNumbers(textedPhoneNumber);
+	        
+	        if (!suspiciousMessagesFound) {
+	            textAreaSMS.setText("Did not find suspicious messages.");
+	        }
+	    }
 	
-		 public void actionPerformed(ActionEvent e) {
-			// Clear text area
-			textAreaSMS.setText("");
-			
-			boolean susSMS = false;
-			ArrayList<SMS> listOfMessagesForThisPhoneNumber = new ArrayList<SMS>();
-			String textedPhoneNumber = textFieldPhoneNumber.getText();
-
-			// For every Phone Number of our Suspect, check if there is suspicious SMS with the entered number
-			for(int i=0; i<suspectGUIPage.getTelephoneNumbers().size(); i++) {
-				 listOfMessagesForThisPhoneNumber = registryGUI.getSuspiciousMessagesBetween(suspectGUIPage.getTelephoneNumbers().get(i) ,textedPhoneNumber);
-				 for(int j=0; j<listOfMessagesForThisPhoneNumber.size(); j++) {
-					 textAreaSMS.append(listOfMessagesForThisPhoneNumber.get(j).getMessage());
-					 textAreaSMS.append("\n");
-					 susSMS = true;
-				 }
-				 // Clearing SMS List for next phone number
-				 listOfMessagesForThisPhoneNumber.clear();
-			}
-			if(!susSMS) { textAreaSMS.setText("Did not found suspicious messages."); }
-
-	}
+	    private void clearTextArea() {
+	        textAreaSMS.setText("");
+	    }
+	
+	    private boolean processPhoneNumbers(String textedPhoneNumber) {
+	        boolean suspiciousMessagesFound = false;
+	        
+	        for (String phoneNumber : suspectGUIPage.getTelephoneNumbers()) {
+	            ArrayList<SMS> listOfMessages = registryGUI.getSuspiciousMessagesBetween(phoneNumber, textedPhoneNumber);
+	            appendMessagesToTextArea(listOfMessages);
+	            suspiciousMessagesFound |= !listOfMessages.isEmpty();
+	        }
+	        return suspiciousMessagesFound;
+	    }
+	
+	    private void appendMessagesToTextArea(ArrayList<SMS> messages) {
+	        for (SMS message : messages) {
+	            textAreaSMS.append(message.getMessage());
+	            textAreaSMS.append("\n");
+	        }
+	    }
 }
-				 
+	 
 
-class ButtonReturntoSearchScreen implements ActionListener{
+private class ButtonReturntoSearchScreen implements ActionListener{
 	
-	public void actionPerformed(ActionEvent e) {
-		dispose();
-		new GUIFindSuspectWindow(registryGUI);
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+			new GUIFindSuspectWindow(registryGUI);
+		}
 	}
-  }
-
 }

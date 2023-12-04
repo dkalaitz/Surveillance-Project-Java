@@ -15,7 +15,7 @@ public class CommunicationAnalyzer {
         for (Communication communication : communicationsList) {
             if (communication instanceof PhoneCall) {
                 PhoneCall currentPhoneCall = (PhoneCall) communication;
-                if (containsMatchingPhoneNumbers(currentPhoneCall, num1, num2)
+                if (currentPhoneCall.containsMatchingPhoneNumbers(num1, num2)
                         && currentPhoneCall.getDuration() > maxDuration) {
                     maxDuration = currentPhoneCall.getDuration();
                     longestPhoneCall = currentPhoneCall;
@@ -24,29 +24,16 @@ public class CommunicationAnalyzer {
         } return longestPhoneCall;
     }
 	
-	// Refactored Version 4
+	// Refactored Version 5
     public ArrayList<SMS> getSuspiciousMessagesBetween(String num1, String num2) {
         ArrayList<SMS> listOfMessages = new ArrayList<>();
 		for (Communication communication: communicationsList) 
             if (communication instanceof SMS) {
                 SMS currentMessage = (SMS) communication;
-                if (containsMatchingPhoneNumbers(currentMessage, num1, num2) 
-                		&& isSuspiciousMessage(currentMessage)) 
+                if (currentMessage.containsMatchingPhoneNumbers(num1, num2) 
+                		&& currentMessage.isSuspiciousMessage()) 
                         listOfMessages.add(currentMessage);
             } return listOfMessages; 
-    }
-    
-    // Extracted method Version 4
-    private boolean containsMatchingPhoneNumbers(Communication currentCommunication, String num1, String num2) {
-        return (currentCommunication.getFirstPhoneNumber().equals(num1) && currentCommunication.getSecondPhoneNumber().equals(num2))
-                || (currentCommunication.getFirstPhoneNumber().equals(num2) && currentCommunication.getSecondPhoneNumber().equals(num1));
-    }
-
-
-    private boolean isSuspiciousMessage(SMS message) {
-        String messageContent = message.getMessage();
-        return messageContent.contains("Bomb") || messageContent.contains("Explosives")
-                || messageContent.contains("Gun") || messageContent.contains("Attack");
     }
 
 }

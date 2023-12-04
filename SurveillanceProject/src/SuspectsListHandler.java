@@ -8,7 +8,7 @@ public class SuspectsListHandler {
         this.suspectsList = suspectsList;
     }
     
-    // Refactored version 4
+    // Refactored version 5
     public Suspect getSuspectWithMostPotentialPartners() {
 		int maxNumberOfTelephoneNumbers = 0;
 		Suspect topSuspect = null;

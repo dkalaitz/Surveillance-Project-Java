@@ -47,28 +47,30 @@ public class GUIFindSuspectWindow extends JFrame{
 			setSize(400,150);
 			setResizable(false);
 			setTitle("Find Suspect");
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		}
 
 		
-class ButtonListenerFindSuspect implements ActionListener {
+private class ButtonListenerFindSuspect implements ActionListener {
 			
-			 public void actionPerformed(ActionEvent e) {
-				 
-				boolean SuspectFound = false;
-				
-				 for(int i=0; i<registryGUI.getSuspects().size(); i++) {
-					 if(registryGUI.getSuspects().get(i).getName().equals(textField.getText())) {
-						 new GUISuspectPage(registryGUI, registryGUI.getSuspects().get(i));
-						 SuspectFound = true;
-						 dispose();
-					 }
-				 }
-				 if(!SuspectFound)
-					 JOptionPane.showMessageDialog(null, "Suspect "+ textField.getText() + " not found");
-			 }
-			 
-		}
+	public void actionPerformed(ActionEvent e) {
+		
+	    Suspect suspect = identifySuspectByName();
 
+        if (suspect != null) {
+            new GUISuspectPage(registryGUI, suspect);
+            dispose();
+        } else 
+        JOptionPane.showMessageDialog(null, "Suspect " + textField.getText() + " not found");
+	}
 
+	private Suspect identifySuspectByName() {
+	    
+		String textSuspectName = textField.getText();
+		for (Suspect suspect : registryGUI.getSuspects()) 
+			if (suspect.getName().equals(textSuspectName)) 
+				return suspect;
+		return null;
+	}
+  }
 }
