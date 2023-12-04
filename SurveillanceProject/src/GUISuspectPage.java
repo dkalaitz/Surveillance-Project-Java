@@ -133,8 +133,8 @@ class GUISuspectPage extends JFrame{
 			textAreaPotentialPartners.setEnabled(false);
 			textAreaPotentialPartners.setDisabledTextColor(Color.black);
 			
-			for(int i=0; i<suspectGUIPage.getPartners().size(); i++) {
-				textAreaPotentialPartners.append(suspectGUIPage.getPartners().get(i).getName() + " , " + suspectGUIPage.getPartners().get(i).getCodeName());
+			for(int i=0; i<suspectGUIPage.getPotentialPartners().size(); i++) {
+				textAreaPotentialPartners.append(suspectGUIPage.getPotentialPartners().get(i).getName() + " , " + suspectGUIPage.getPotentialPartners().get(i).getCodeName());
 				textAreaPotentialPartners.append("\n");
 				}
 			

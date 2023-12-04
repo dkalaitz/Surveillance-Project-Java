@@ -47,9 +47,7 @@ public class GUIFindSuspectWindow extends JFrame{
 			setSize(400,150);
 			setResizable(false);
 			setTitle("Find Suspect");
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
-			
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
 		}
 
 		

@@ -8,45 +8,40 @@ public class CommunicationAnalyzer {
     	this.communicationsList = communicationsList;
     }
 
+    // getLongestPhoneCallBetween Refactored
     public PhoneCall getLongestPhoneCallBetween(String num1, String num2) {
-        PhoneCall longestPhoneCall = (PhoneCall) communicationsList.get(0);
-        int maxDuration = longestPhoneCall.getDuration();
-
-        for (int i = 0; i < 7; i++) {
-            PhoneCall currentPhoneCall = (PhoneCall) communicationsList.get(i);
-
-            if ((communicationsList.get(i).getFirstPhoneNumber().equals(num1) && communicationsList.get(i).getSecondPhoneNumber().equals(num2))
-                    || (communicationsList.get(i).getFirstPhoneNumber().equals(num2) && communicationsList.get(i).getSecondPhoneNumber().equals(num1)))
-                if (maxDuration < currentPhoneCall.getDuration()) 
+        int maxDuration = 0;
+        PhoneCall longestPhoneCall = null;
+        for (Communication communication : communicationsList) {
+            if (communication instanceof PhoneCall) {
+                PhoneCall currentPhoneCall = (PhoneCall) communication;
+                if (containsMatchingPhoneNumbers(currentPhoneCall, num1, num2)
+                        && currentPhoneCall.getDuration() > maxDuration) {
                     maxDuration = currentPhoneCall.getDuration();
                     longestPhoneCall = currentPhoneCall;
-        }return longestPhoneCall;
+                }
+            }
+        } return longestPhoneCall;
     }
-    
+	
+	// Refactored Version 4
     public ArrayList<SMS> getSuspiciousMessagesBetween(String num1, String num2) {
         ArrayList<SMS> listOfMessages = new ArrayList<>();
-        ArrayList<SMS> tempMessages = new ArrayList<>();
-
-        // Extract SMS messages from communicationsList
-        for (int i = 0; i < communicationsList.size(); i++) {
-            if (communicationsList.get(i) instanceof SMS) {
-                tempMessages.add((SMS) communicationsList.get(i));
-            }
-        }
-
-        // Check for suspicious messages
-        int currentIndex = 0;
-        for (int i = 0; i < communicationsList.size(); i++) 
-            if (communicationsList.get(i) instanceof SMS) {
-                SMS currentMessage = (SMS) communicationsList.get(i);
-
-                if ((currentMessage.getFirstPhoneNumber().equals(num1) && currentMessage.getSecondPhoneNumber().equals(num2))
-                        || (currentMessage.getFirstPhoneNumber().equals(num2) && currentMessage.getSecondPhoneNumber().equals(num1))) 
-                    if (isSuspiciousMessage(currentMessage)) 
+		for (Communication communication: communicationsList) 
+            if (communication instanceof SMS) {
+                SMS currentMessage = (SMS) communication;
+                if (containsMatchingPhoneNumbers(currentMessage, num1, num2) 
+                		&& isSuspiciousMessage(currentMessage)) 
                         listOfMessages.add(currentMessage);
-                currentIndex++;
             } return listOfMessages; 
     }
+    
+    // Extracted method Version 4
+    private boolean containsMatchingPhoneNumbers(Communication currentCommunication, String num1, String num2) {
+        return (currentCommunication.getFirstPhoneNumber().equals(num1) && currentCommunication.getSecondPhoneNumber().equals(num2))
+                || (currentCommunication.getFirstPhoneNumber().equals(num2) && currentCommunication.getSecondPhoneNumber().equals(num1));
+    }
+
 
     private boolean isSuspiciousMessage(SMS message) {
         String messageContent = message.getMessage();

@@ -16,8 +16,8 @@ public class SuspectManager {
 	// Get the common partners
     public ArrayList<Suspect> findCommonPartners(Suspect suspect1, Suspect suspect2) {
     	ArrayList<Suspect> commonPartners = new ArrayList<>();
-        for (Suspect possible : suspect1.getPartners()) 
-            for (Suspect otherPossible : suspect2.getPartners()) 
+        for (Suspect possible : suspect1.getPotentialPartners()) 
+            for (Suspect otherPossible : suspect2.getPotentialPartners()) 
                 if (possible.equals(otherPossible)) 
                     commonPartners.add(possible);
         return commonPartners;
@@ -25,7 +25,7 @@ public class SuspectManager {
 	
 	// Print potential Partners
     public void printPossiblePartners(Suspect suspect) {
-        for (Suspect possiblePartner : suspect.getPartners()) {
+        for (Suspect possiblePartner : suspect.getPotentialPartners()) {
             System.out.print("Name " + possiblePartner.getName() + ", " + possiblePartner.getCodeName());
             if (possiblePartner.getCountryName().equals(suspect.getCountryName())) 
                 System.out.print("*");
@@ -36,8 +36,8 @@ public class SuspectManager {
 	// Get suggested partners
     public ArrayList<Suspect> getSuggestedPartners(Suspect suspect) {
         ArrayList<Suspect> suggestedPartners = new ArrayList<>();
-        for (Suspect partner : suspect.getPartners()) 
-            for (Suspect suggestedPartner : partner.getPartners()) 
+        for (Suspect partner : suspect.getPotentialPartners()) 
+            for (Suspect suggestedPartner : partner.getPotentialPartners()) 
                 if (!suspect.isConnectedTo(suggestedPartner) && !suspect.equals(suggestedPartner)) 
                     suggestedPartners.add(suggestedPartner); 	
         return suggestedPartners;

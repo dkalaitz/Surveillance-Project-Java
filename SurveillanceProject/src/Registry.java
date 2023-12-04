@@ -33,7 +33,7 @@ public class Registry {
 	}
 	
 	public Suspect getSuspectWithMostPartners() {
-		return suspectsListHandler.getSuspectWithMostPartners();
+		return suspectsListHandler.getSuspectWithMostPotentialPartners();
 	}
 	
 	public PhoneCall getLongestPhoneCallBetween(String num1, String num2) {

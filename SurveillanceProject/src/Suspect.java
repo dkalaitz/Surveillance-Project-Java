@@ -7,7 +7,7 @@ public class Suspect{
 	  private String country;
 	  private String city;
 	  private ArrayList<String> suspectTelephoneNumbers = new ArrayList<>();
-	  private ArrayList<Suspect> partners = new ArrayList<>();
+	  private ArrayList<Suspect> potentialPartners = new ArrayList<>();
 
 	  public Suspect(String name, String codeName, String country, String city ) {
 	        this.name = name;
@@ -18,15 +18,15 @@ public class Suspect{
 		
 		// Add potential suspect to the partners list of each suspect respectively
 		public void connectTo(Suspect aSuspect) {
-				if(!partners.contains(aSuspect)){
-					partners.add(aSuspect);
-					aSuspect.partners.add(this);
+				if(!potentialPartners.contains(aSuspect)){
+					potentialPartners.add(aSuspect);
+					aSuspect.potentialPartners.add(this);
 				}
 		}
 		
 		// Check if a suspect is connected to this suspect
 		public boolean isConnectedTo(Suspect suspect) {
-	        return partners.contains(suspect);
+	        return potentialPartners.contains(suspect);
 		}
 
 		public boolean hasPhoneNumber(String phoneNumber) {
@@ -59,8 +59,8 @@ public class Suspect{
 			return suspectTelephoneNumbers;
 		}
 		
-		public ArrayList<Suspect> getPartners(){
-			return partners;
+		public ArrayList<Suspect> getPotentialPartners(){
+			return potentialPartners;
 		}
 
 
